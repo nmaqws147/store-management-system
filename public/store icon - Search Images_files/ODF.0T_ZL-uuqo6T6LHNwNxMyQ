@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg data-name="VectorStock" xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <polygon points="224 48 224 208 240 208 240 240 208 240 208 224 48 224 48 240 16 240 16 208 32 208 32 48 16 48 16 16 48 16 48 32 208 32 208 16 240 16 240 48 224 48" style="fill: #f7fcfb; stroke-width: 0px;"/>
+  <path d="m256,64V0h-64v16H64V0H0v64h16v128H0v64h64v-16h128v16h64v-64h-16V64h16ZM16,16h32v32H16V16Zm32,224H16v-32h32v32Zm192,0h-32v-32h32v32Zm-16-48h-32v32H64v-32h-32V64h32v-32h128v32h32v128Zm-16-144V16h32v32h-32Z" style="fill: #179dcd; stroke-width: 0px;"/>
+  <polygon points="208 80 208 96 192 96 192 128 176 128 176 160 160 160 160 192 96 192 96 160 80 160 80 128 64 128 64 96 48 96 48 80 96 80 96 112 112 112 112 144 144 144 144 112 160 112 160 80 208 80" style="fill: #0a0b0b; stroke-width: 0px;"/>
+</svg>
