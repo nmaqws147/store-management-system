@@ -33,8 +33,6 @@ const Products = () => {
   });
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [customerQuantity,setCustomerQuantity] = useState<number>(0);
-  console.log(product);
-
   const saveToLocalStorage = (products: Product[]) => {
     if (typeof window !== 'undefined') {
       try {
@@ -52,8 +50,6 @@ const Products = () => {
       reader.onerror = error => reject(error);
     });
   };
-  console.log(customerQuantity);
-
   // Open/close popup
   const handleProduct = () => {
     setShowProduct(!showProduct);
@@ -141,7 +137,9 @@ const calculateTotal = () => {
     saveToLocalStorage(updatedProducts);
   }
 }
-console.log(salarySum);
+const deleteAll = () => {
+  setProduct([]);
+}
   return (
     <> 
     {/* Main Section */}
@@ -156,6 +154,7 @@ console.log(salarySum);
     </div>
   </div>
 ) : (
+  <>
   <div className="fixed top-20 right-6 z-30">
   <button
     onClick={handleProduct}
@@ -165,6 +164,18 @@ console.log(salarySum);
     <span className="font-medium">Add Product</span>
   </button>
 </div>
+<div className="fixed right-6 bottom-6 z-40 hover:scale-115  transition-all duration-300">
+    <button
+        onClick={deleteAll}
+        className="p-4 bg-red-500 cursor-pointer text-white rounded-full shadow-lg"
+    >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+    </button>
+</div>
+</>
 )}
       {/* Popup */}
       {showProduct && (

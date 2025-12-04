@@ -8,7 +8,7 @@ const MonthlySales = ({monthly}:weekly) => {
     <div className="flex items-center justify-between">
       <div>
         <h3 className="text-sm font-semibold text-purple-200 uppercase tracking-wide">Monthly Sales</h3>
-        <p className="text-3xl font-bold text-white mt-3">${monthly.toFixed(2)}</p>
+        <p className="text-3xl font-bold text-white mt-3">${monthly !== undefined && monthly !== null ? monthly.toFixed(2) : '0.00'}</p>
       </div>
       <div className="w-14 h-14 bg-white/10 group-hover:rotate-12  rounded-xl flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform">
         <span className="text-2xl text-white">🎯</span>

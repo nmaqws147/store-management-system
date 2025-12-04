@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { Chart } from 'chart.js/auto';
+import { Chart, ChartOptions } from 'chart.js/auto';
 
 type BarChartProps = {
   data: {
@@ -25,6 +25,32 @@ const BarChart = ({ data, title, color = '#3B82F6' }: BarChartProps) => {
     const ctx = chartRef.current.getContext('2d');
     if (!ctx) return;
 
+    // تعريف options مع النوع المناسب
+    const options: ChartOptions<'bar'> = {
+      responsive: true,
+      plugins: {
+        legend: { 
+          display: false
+        }
+      },
+      scales: {
+        y: { 
+          beginAtZero: true,
+          display: false
+        },
+        x: {
+          display: false,
+          grid: {
+            display: false,
+          },
+          // إضافة الخصائص المطلوبة بشكل صحيح
+          ticks: {
+            display: false,
+          }
+        }
+      }
+    };
+
     chartInstance.current = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -35,25 +61,10 @@ const BarChart = ({ data, title, color = '#3B82F6' }: BarChartProps) => {
           backgroundColor: color,
           borderColor: color,
           borderWidth: 1,
+          borderRadius: 8,
         }]
       },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { 
-            display: false // ✅ شيل الليجيند
-          }
-        },
-        scales: {
-          y: { 
-            beginAtZero: true,
-            display: false // ✅ شيل المحور الرأسي
-          },
-          x: {
-            display: false // ✅ شيل المحور الأفقي
-          }
-        }
-      }
+      options: options
     });
 
     return () => {

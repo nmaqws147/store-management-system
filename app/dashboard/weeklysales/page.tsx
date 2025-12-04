@@ -8,7 +8,7 @@ const WeeklySales = ({weekly}:DailyTotal) => {
     <div className="flex items-center justify-between">
       <div>
         <h3 className="text-sm font-semibold text-blue-700 uppercase tracking-wide">Weekly Sales</h3>
-        <p className="text-3xl font-bold text-blue-900 mt-3">${weekly.toFixed(2)}</p>
+        <p className="text-3xl font-bold text-blue-900 mt-3"> ${weekly !== undefined && weekly !== null ? weekly.toFixed(2) : '0.00'}</p>
       </div>
       <div className="w-14 h-14 bg-blue-100/50 rounded-xl flex items-center justify-center shadow-inner group-hover:rotate-12 transition-transform">
         <span className="text-2xl">📊</span>

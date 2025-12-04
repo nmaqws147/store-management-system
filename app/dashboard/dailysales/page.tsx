@@ -8,7 +8,7 @@ const DailySales = ({daily}:Daily) => {
     <div className="flex items-center justify-between">
       <div>
         <h3 className="text-sm font-semibold text-green-700 uppercase tracking-wide">Todays Sales</h3>
-        <p className="text-3xl font-bold text-green-900 mt-3">${daily.toFixed(2)}</p>
+        <p className="text-3xl font-bold text-green-900 mt-3">${daily !== undefined && daily !== null ? daily.toFixed(2) : '0.00'}</p>
       </div>
       <div className="w-14 h-14 bg-white/80 group-hover:rotate-12  rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
         <span className="text-2xl">💰</span>
