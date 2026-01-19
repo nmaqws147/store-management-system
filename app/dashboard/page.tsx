@@ -27,25 +27,25 @@ const Dashboard = () => {
     const [dailyChart, setDailyChart] = useState<DailyTotal[]>(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('dailyChart');
-            return saved ? JSON.parse(saved) : [0];
+            return saved ? JSON.parse(saved) : [];
         }
-        return [0];
+        return [];
     });
 
     const [weeklyChart, setWeeklyChart] = useState<WeeklyTotal[]>(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('weeklyChart');
-            return saved ? JSON.parse(saved) : [0];
+            return saved ? JSON.parse(saved) : [];
         }
-        return [0];
+        return [];
     });
 
     const [monthlyChart, setMonthlyChart] = useState<MonthlyTotal[]>(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('monthlyChart');
-            return saved ? JSON.parse(saved) : [0];
+            return saved ? JSON.parse(saved) : [];
         }
-        return [0];
+        return [];
     });
 
     useEffect(() => {
@@ -98,73 +98,21 @@ const Dashboard = () => {
     }, [monthlyChart]);
 
     type SalesData = number[] | DailyTotal[] | WeeklyTotal[] | MonthlyTotal[];
+
+    // تعديل: الحساب فقط
     const calculateSales = useCallback((data: SalesData, period: 'daily' | 'weekly' | 'monthly') => {
         if (period === 'daily') {
-            const now = new Date();
-            const thisDay = now.toDateString();
-            const lastResetDate = typeof window !== 'undefined' ? localStorage.getItem('lastResetDate') : null;
-            
-            if (lastResetDate !== thisDay) {
-                const salesData = data as number[];
-                const dailyTotal = salesData.reduce((sum, amount) => sum + amount, 0);
-                const today = new Date();
-                const dayName = today.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-                
-                setDailyChart(prev => {
-                    const newDailyChart = [...prev, {
-                        day: dayName,
-                        total: dailyTotal,
-                        date: today.toISOString().split('T')[0]
-                    }];
-                    if (typeof window !== 'undefined') {
-                        localStorage.setItem('dailyChart', JSON.stringify(newDailyChart));
-                    }
-                    return newDailyChart;
-                });
-                
-                setSalarySum([]); 
-                if (typeof window !== 'undefined') localStorage.setItem('lastResetDate', thisDay);
-                saveToLocalStorage('dailyTotal', 0);
-                return 0;
-            }
-            
             const salesData = data as number[];
-            const dailyTotal = salesData.reduce((sum, amount) => sum + amount, 0);
-            saveToLocalStorage('dailyTotal', dailyTotal);
-            return dailyTotal;
+            return salesData.reduce((sum, amount) => sum + amount, 0);
         }
         else if(period === 'weekly'){
-            const weeklyTotal = dailyChart.reduce((sum, day) => sum + day.total, 0);
-            return weeklyTotal;
+            return dailyChart.reduce((sum, day) => sum + day.total, 0);
         }
         else if(period === 'monthly'){
-            if (monthlyChart.length === 12) {
-                setMonthlyChart([]);
-                if (typeof window !== 'undefined') {
-                    localStorage.setItem('monthlyChart', JSON.stringify([]));
-                }
-            }
-            if(weeklyChart.length === 4){
-                const monthlyTotal = weeklyChart.reduce((sum, week) => sum + week.total, 0);
-                const today = new Date();
-                const monthName = today.toLocaleDateString('en-US', { month: 'long' });
-                setMonthlyChart(prev => {
-                    const newMonthlyChart = [...prev, {
-                        month: monthName,
-                        total: monthlyTotal,
-                    }];
-                    if (typeof window !== 'undefined') {
-                        localStorage.setItem('monthlyChart', JSON.stringify(newMonthlyChart));
-                    }
-                    return newMonthlyChart;
-                });
-                setWeeklyChart([]);
-            }
-            const monthlyTotal = weeklyChart.reduce((sum, week) => sum + week.total, 0);
-            return monthlyTotal;
+            return weeklyChart.reduce((sum, week) => sum + week.total, 0);
         }
         return 0;
-    }, [setSalarySum, saveToLocalStorage, dailyChart, weeklyChart, monthlyChart]);
+    }, [dailyChart, weeklyChart]);
 
     const salesData = useMemo(() => {
         return {
@@ -175,6 +123,51 @@ const Dashboard = () => {
     }, [salarySum, calculateSales]);
 
     const { daily, weekly, monthly } = salesData;
+
+    // تعديل: نقل منطق الـ Reset والتحديث لليوم الجديد هنا لمنع الـ Infinite Loop
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        
+        const now = new Date();
+        const thisDay = now.toDateString();
+        const lastResetDate = localStorage.getItem('lastResetDate');
+
+        if (lastResetDate !== thisDay) {
+            const today = new Date();
+            const dayName = today.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            
+            setDailyChart(prev => {
+                const newDailyChart = [...prev, {
+                    day: dayName,
+                    total: daily,
+                    date: today.toISOString().split('T')[0]
+                }];
+                localStorage.setItem('dailyChart', JSON.stringify(newDailyChart));
+                return newDailyChart;
+            });
+            
+            setSalarySum([]); 
+            localStorage.setItem('lastResetDate', thisDay);
+            saveToLocalStorage('dailyTotal', 0);
+        } else {
+            saveToLocalStorage('dailyTotal', daily);
+        }
+
+        if(weeklyChart.length === 4){
+            const monthlyTotal = weeklyChart.reduce((sum, week) => sum + week.total, 0);
+            const today = new Date();
+            const monthName = today.toLocaleDateString('en-US', { month: 'long' });
+            setMonthlyChart(prev => {
+                const newMonthlyChart = [...prev, {
+                    month: monthName,
+                    total: monthlyTotal,
+                }];
+                localStorage.setItem('monthlyChart', JSON.stringify(newMonthlyChart));
+                return newMonthlyChart;
+            });
+            setWeeklyChart([]);
+        }
+    }, [daily, weeklyChart, setSalarySum, saveToLocalStorage]);
 
     return(
         <>
