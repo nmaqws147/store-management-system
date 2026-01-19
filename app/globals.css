@@ -1,2 +1,22 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: white;
+  color: black;
+}
+@keyframes cloud-move {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw - 100%)); }
+}
+
+.cloud-animation-1 {
+  animation: cloud-move 60s linear infinite alternate;
+}
+
+.cloud-animation-2 {
+  animation: cloud-move 75s linear infinite alternate reverse;
+}
