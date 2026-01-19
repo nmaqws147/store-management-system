@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { DailyTotal, WeeklyTotal, MonthlyTotal } from "../page";
 type ResetDataProps = {
